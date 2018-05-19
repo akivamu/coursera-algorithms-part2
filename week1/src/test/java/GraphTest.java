@@ -1,7 +1,11 @@
 import edu.princeton.cs.algs4.StdOut;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class Main {
-    public static void main(String[] args) {
+
+public class GraphTest {
+    @Test
+    public void testGraphRepresentationAdjacentList() {
         Graph graph = new Graph(13);
         graph.addEdge(0, 5);
         graph.addEdge(3, 4);
@@ -19,5 +23,8 @@ public class Main {
 
         StdOut.println("Edges: " + graph.E());
         StdOut.println(graph);
+
+        Assert.assertEquals(13, graph.V());
+        Assert.assertEquals(13, graph.E());
     }
 }
