@@ -22,3 +22,7 @@ Maintain a list `adj[V]`. Item at `adj[v1]` is a list of all adjacent vertices t
 ## Depth-first search vs Breadth-first search  
 
 [Good comparision DFS vs BFS](https://www.thecrazyprogrammer.com/2017/06/difference-between-bfs-and-dfs.html)
+
+## Find connected components  
+Use DFS to identify all components in graph.  
+Why DFS: Save memory (linear to depth)  

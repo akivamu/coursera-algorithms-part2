@@ -7,7 +7,7 @@ public class DFSBFSTest {
     private Graph graph;
 
     @Before
-    public void setup(){
+    public void setup() {
         graph = new Graph(13);
         graph.addEdge(0, 5);
         graph.addEdge(3, 4);
@@ -69,6 +69,18 @@ public class DFSBFSTest {
                 }
                 StdOut.println();
             }
+        }
+    }
+
+    @Test
+    public void testCC() {
+        ConnectedComponents cc = new ConnectedComponents(graph);
+
+        Assert.assertEquals(3, cc.count());
+
+        StdOut.println("---- CC");
+        for (int v = 0; v < graph.V(); v++) {
+            StdOut.println(v + " belongs to " + cc.id(v));
         }
     }
 }
