@@ -19,3 +19,6 @@ Maintain a list `adj[V]`. Item at `adj[v1]` is a list of all adjacent vertices t
 
 ![](docs/graph-representation.png)
 
+## Depth-first search  
+Visit vertices in graph, by recursively visit vertex v and adjacent vertices.
+The visiting order is stack-based (hop to first unvisited vertex).  
