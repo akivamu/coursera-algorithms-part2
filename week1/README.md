@@ -19,6 +19,6 @@ Maintain a list `adj[V]`. Item at `adj[v1]` is a list of all adjacent vertices t
 
 ![](docs/graph-representation.png)
 
-## Depth-first search  
-Visit vertices in graph, by recursively visit vertex v and adjacent vertices.
-The visiting order is stack-based (hop to first unvisited vertex).  
+## Depth-first search vs Breadth-first search  
+
+[Good comparision DFS vs BFS](https://www.thecrazyprogrammer.com/2017/06/difference-between-bfs-and-dfs.html)
