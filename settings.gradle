@@ -1,3 +1,4 @@
 rootProject.name = 'coursera-algorithms-part2'
 include 'week1'
+include 'common'
 
