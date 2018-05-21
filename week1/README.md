@@ -26,3 +26,10 @@ Maintain a list `adj[V]`. Item at `adj[v1]` is a list of all adjacent vertices t
 ## Find connected components  
 Use DFS to identify all components in graph.  
 Why DFS: Save memory (linear to depth)  
+
+
+# Directed Graphs (digraph)
+
+## How to store a digraph  
+Similar to Undirected Graph, using Adjacent list. But the edge in Bag are one-way.
+
