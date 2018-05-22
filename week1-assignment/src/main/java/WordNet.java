@@ -66,12 +66,8 @@ public class WordNet {
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
-        for (String[] nouns : synSets) {
-            for (String noun : nouns) {
-                if (noun.contentEquals(word)) return true;
-            }
-        }
-        return false;
+        Set<String> nouns = (Set<String>) nouns();
+        return nouns.contains(word);
     }
 
     // distance between nounA and nounB (defined below)
