@@ -60,51 +60,20 @@ public class WordNet {
 
     // distance between nounA and nounB (defined below)
     public int distance(String nounA, String nounB) {
-        // Find ids
-        int v = -1;
-        int w = -1;
-        for (int i = 0; i < synSets.size(); i++) {
-            for (String noun : synSets.get(i)) {
-                if (v != -1 && w != -1) break;
-
-                if (v == -1 && noun.contentEquals(nounA)) {
-                    v = i;
-                }
-
-                if (w == -1 && noun.contentEquals(nounB)) {
-                    w = i;
-                }
-            }
-        }
-        if (v == -1 || w == -1) throw new IllegalArgumentException();
-
+        List<Integer> id1 = findIds(nounA);
+        List<Integer> id2 = findIds(nounB);
         SAP sap = new SAP(graph);
-        return sap.length(v, w);
+        return sap.length(id1, id2);
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
-        // Find ids
-        int v = -1;
-        int w = -1;
-        for (int i = 0; i < synSets.size(); i++) {
-            for (String noun : synSets.get(i)) {
-                if (v != -1 && w != -1) break;
-
-                if (v == -1 && noun.contentEquals(nounA)) {
-                    v = i;
-                }
-
-                if (w == -1 && noun.contentEquals(nounB)) {
-                    w = i;
-                }
-            }
-        }
-        if (v == -1 || w == -1) throw new IllegalArgumentException();
+        List<Integer> id1 = findIds(nounA);
+        List<Integer> id2 = findIds(nounB);
 
         SAP sap = new SAP(graph);
-        int id = sap.ancestor(v, w);
+        int id = sap.ancestor(id1, id2);
         if (id == -1) return null;
 
         StringBuilder sb = new StringBuilder();
@@ -112,5 +81,21 @@ public class WordNet {
             sb.append(noun).append(" ");
         }
         return sb.toString().trim();
+    }
+
+    private List<Integer> findIds(String noun) {
+        List<Integer> ret = new ArrayList<>();
+        for (int i = 0; i < synSets.size(); i++) {
+            for (String item : synSets.get(i)) {
+                if (item.contentEquals(noun)) {
+                    ret.add(i);
+                    break;
+                }
+            }
+        }
+
+        if (ret.isEmpty()) throw new IllegalArgumentException();
+
+        return ret;
     }
 }
