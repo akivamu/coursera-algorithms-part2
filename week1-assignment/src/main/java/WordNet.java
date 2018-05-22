@@ -3,13 +3,15 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Topological;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class WordNet {
     private final List<String[]> synSets = new ArrayList<>();
+    private final Map<String, Set<Integer>> words = new HashMap<>();
     private final SAP sap;
 
     // constructor takes the name of the two input files
@@ -18,14 +20,30 @@ public class WordNet {
             throw new IllegalArgumentException();
         }
 
+        // Read words
         In in = new In(synsets);
         while (in.hasNextLine()) {
             String line = in.readLine();
             String[] tokens = line.split(",");
-            synSets.add(tokens[1].split(" "));
+            int id = Integer.parseInt(tokens[0]);
+            String[] nouns = tokens[1].split(" ");
+
+            synSets.add(nouns);
+
+            for (String noun : nouns) {
+                Set<Integer> ids;
+                if (words.containsKey(noun)) {
+                    ids = words.get(noun);
+                } else {
+                    ids = new HashSet<>();
+                    words.put(noun, ids);
+                }
+                ids.add(id);
+            }
         }
         in.close();
 
+        // Read hyperNyms
         in = new In(hypernyms);
         Digraph graph = new Digraph(synSets.size());
         while (in.hasNextLine()) {
@@ -56,31 +74,26 @@ public class WordNet {
 
     // returns all WordNet nouns
     public Iterable<String> nouns() {
-        Set<String> ret = new HashSet<>();
-        for (String[] nouns : synSets) {
-            ret.addAll(Arrays.asList(nouns));
-        }
-        return ret;
+        return words.keySet();
     }
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
-        Set<String> nouns = (Set<String>) nouns();
-        return nouns.contains(word);
+        return words.containsKey(word);
     }
 
     // distance between nounA and nounB (defined below)
     public int distance(String nounA, String nounB) {
-        List<Integer> id1 = findIds(nounA);
-        List<Integer> id2 = findIds(nounB);
+        Set<Integer> id1 = findIds(nounA);
+        Set<Integer> id2 = findIds(nounB);
         return sap.length(id1, id2);
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
-        List<Integer> id1 = findIds(nounA);
-        List<Integer> id2 = findIds(nounB);
+        Set<Integer> id1 = findIds(nounA);
+        Set<Integer> id2 = findIds(nounB);
 
         int id = sap.ancestor(id1, id2);
         if (id == -1) return null;
@@ -92,16 +105,12 @@ public class WordNet {
         return sb.toString().trim();
     }
 
-    private List<Integer> findIds(String noun) {
-        List<Integer> ret = new ArrayList<>();
-        for (int i = 0; i < synSets.size(); i++) {
-            for (String item : synSets.get(i)) {
-                if (item.contentEquals(noun)) {
-                    ret.add(i);
-                    break;
-                }
-            }
+    private Set<Integer> findIds(String noun) {
+        if (!words.containsKey(noun)) {
+            throw new IllegalArgumentException();
         }
+
+        Set<Integer> ret = words.get(noun);
 
         if (ret.isEmpty()) throw new IllegalArgumentException();
 
