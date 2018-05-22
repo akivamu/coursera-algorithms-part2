@@ -4,8 +4,11 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.Arrays;
+
 public class SAP {
     private final Digraph digraph;
+    private final Result result = new Result();
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
@@ -16,84 +19,26 @@ public class SAP {
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
-        validateVertices(v, w);
-
-        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(digraph, v);
-        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(digraph, w);
-
-        int shortestLength = Integer.MAX_VALUE;
-        int ret = -1;
-        for (int vertex = 0; vertex < digraph.V(); vertex++) {
-            int length = bfsV.distTo(vertex) + bfsW.distTo(vertex);
-            if (length > 0 && length < shortestLength) {
-                shortestLength = length;
-                ret = vertex;
-            }
-        }
-
-        if (ret == -1) return -1;
-        else return shortestLength;
+        result.calculate(v, w);
+        return result.shortestLength;
     }
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
-        validateVertices(v, w);
-
-        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(digraph, v);
-        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(digraph, w);
-
-        int shortestLength = Integer.MAX_VALUE;
-        int ret = -1;
-        for (int vertex = 0; vertex < digraph.V(); vertex++) {
-            int length = bfsV.distTo(vertex) + bfsW.distTo(vertex);
-            if (length > 0 && length < shortestLength) {
-                shortestLength = length;
-                ret = vertex;
-            }
-        }
-        return ret;
+        result.calculate(v, w);
+        return result.shortestCommonAncestor;
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
-        validateVertices(v);
-        validateVertices(w);
-
-        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(digraph, v);
-        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(digraph, w);
-
-        int shortestLength = Integer.MAX_VALUE;
-        int ret = -1;
-        for (int vertex = 0; vertex < digraph.V(); vertex++) {
-            int length = bfsV.distTo(vertex) + bfsW.distTo(vertex);
-            if (length > 0 && length < shortestLength) {
-                shortestLength = length;
-                ret = vertex;
-            }
-        }
-
-        if (ret == -1) return -1;
-        else return shortestLength;
+        result.calculate(v, w);
+        return result.shortestLength;
     }
 
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
-        validateVertices(v);
-        validateVertices(w);
-
-        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(digraph, v);
-        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(digraph, w);
-
-        int shortestLength = Integer.MAX_VALUE;
-        int ret = -1;
-        for (int vertex = 0; vertex < digraph.V(); vertex++) {
-            int length = bfsV.distTo(vertex) + bfsW.distTo(vertex);
-            if (length > 0 && length < shortestLength) {
-                shortestLength = length;
-                ret = vertex;
-            }
-        }
-        return ret;
+        result.calculate(v, w);
+        return result.shortestCommonAncestor;
     }
 
     // do unit testing of this class
@@ -107,6 +52,38 @@ public class SAP {
             int length = sap.length(v, w);
             int ancestor = sap.ancestor(v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
+        }
+    }
+
+    private class Result {
+        int shortestLength = Integer.MAX_VALUE;
+        int shortestCommonAncestor = -1;
+
+        public void calculate(int v, int w) {
+            if (v < 0 || v >= digraph.V() || w < 0 || w >= digraph.V()) throw new IllegalArgumentException();
+
+            calculate(Arrays.asList(v), Arrays.asList(w));
+        }
+
+        public void calculate(Iterable<Integer> v, Iterable<Integer> w) {
+            shortestLength = Integer.MAX_VALUE;
+            shortestCommonAncestor = -1;
+
+            validateVertices(v);
+            validateVertices(w);
+
+            BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(digraph, v);
+            BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(digraph, w);
+
+            for (int vertex = 0; vertex < digraph.V(); vertex++) {
+                int length = bfsV.distTo(vertex) + bfsW.distTo(vertex);
+                if (length > 0 && length < shortestLength) {
+                    shortestLength = length;
+                    shortestCommonAncestor = vertex;
+                }
+            }
+
+            if (shortestCommonAncestor == -1) shortestLength = -1;
         }
     }
 
