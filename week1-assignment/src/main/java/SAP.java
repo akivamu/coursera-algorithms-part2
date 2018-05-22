@@ -90,8 +90,8 @@ public class SAP {
     private void validateVertices(Iterable<Integer> vertices) {
         if (vertices == null) throw new IllegalArgumentException();
 
-        for (Integer v : vertices) {
-            if (v == null) throw new IllegalArgumentException();
+        for (Object vertex : vertices) {
+            if (vertex == null) throw new IllegalArgumentException();
         }
     }
 }
