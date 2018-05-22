@@ -11,6 +11,7 @@ import java.util.Set;
 public class WordNet {
     private final List<String[]> synSets = new ArrayList<>();
     private final Digraph graph;
+    private final SAP sap;
 
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
@@ -50,6 +51,8 @@ public class WordNet {
 
             if (rootCount > 1) throw new IllegalArgumentException();
         }
+
+        sap = new SAP(graph);
     }
 
     // returns all WordNet nouns
@@ -75,7 +78,6 @@ public class WordNet {
     public int distance(String nounA, String nounB) {
         List<Integer> id1 = findIds(nounA);
         List<Integer> id2 = findIds(nounB);
-        SAP sap = new SAP(graph);
         return sap.length(id1, id2);
     }
 
@@ -85,7 +87,6 @@ public class WordNet {
         List<Integer> id1 = findIds(nounA);
         List<Integer> id2 = findIds(nounB);
 
-        SAP sap = new SAP(graph);
         int id = sap.ancestor(id1, id2);
         if (id == -1) return null;
 
