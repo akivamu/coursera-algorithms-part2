@@ -87,14 +87,8 @@ public class SAP {
         }
     }
 
-    private void validateVertices(int... vertices) {
-        for (int vertex : vertices) {
-            if (vertex < 0 || vertex >= digraph.V()) throw new IllegalArgumentException();
-        }
-    }
-
     private void validateVertices(Iterable<Integer> vertices) {
-        if (!vertices.iterator().hasNext()) throw new IllegalArgumentException();
+        if (vertices == null) throw new IllegalArgumentException();
 
         for (Integer v : vertices) {
             if (v == null) throw new IllegalArgumentException();

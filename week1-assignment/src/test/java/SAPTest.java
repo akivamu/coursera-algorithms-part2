@@ -1,8 +1,10 @@
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class SAPTest {
     private Digraph readDigraph(String fileName) {
@@ -11,13 +13,15 @@ public class SAPTest {
     }
 
     private void testSAP(String digraphFileName, int v, int w, int eLength, int eAncestor) {
+        testSAP(digraphFileName, Arrays.asList(v), Arrays.asList(w), eLength, eAncestor);
+    }
+
+    private void testSAP(String digraphFileName, Iterable<Integer> v, Iterable<Integer> w, int eLength, int eAncestor) {
         Digraph digraph = readDigraph(digraphFileName);
         SAP sap = new SAP(digraph);
 
         int length = sap.length(v, w);
         int ancestor = sap.ancestor(v, w);
-        StdOut.println(v + "-" + w + ": length " + length);
-        StdOut.println(v + "-" + w + ": ancestor " + ancestor);
         Assert.assertEquals(eLength, length);
         Assert.assertEquals(eAncestor, ancestor);
     }
@@ -31,4 +35,15 @@ public class SAPTest {
         testSAP("digraph1.txt", 3, 3, 0, 3);
     }
 
+    @Test
+    public void test2() {
+        testSAP("digraph1.txt", Collections.EMPTY_LIST, Arrays.asList(11), -1, -1);
+
+        try {
+            testSAP("digraph1.txt", null, Arrays.asList(11), -1, -1);
+            Assert.fail();
+        } catch (IllegalArgumentException e) {
+
+        }
+    }
 }
