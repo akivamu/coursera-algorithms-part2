@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':common')
+}
+
+task dist(type: Zip) {
+    dependsOn build
+    from 'src/main/java/'
+    archiveName "wordnet.zip"
+}
