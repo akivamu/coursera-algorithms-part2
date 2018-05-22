@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Topological;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,18 @@ public class WordNet {
             }
         }
         in.close();
+
+        Topological topological = new Topological(graph);
+        if (!topological.hasOrder()) throw new IllegalArgumentException();
+
+        int rootCount = 0;
+        for (int i = 0; i < graph.V(); i++) {
+            if (rootCount > 1) throw new IllegalArgumentException();
+
+            if (graph.outdegree(i) == 0) {
+                rootCount++;
+            }
+        }
     }
 
     // returns all WordNet nouns
