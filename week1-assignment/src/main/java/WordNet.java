@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class WordNet {
     private final List<String[]> synSets = new ArrayList<>();
-    private final Digraph graph;
     private final SAP sap;
 
     // constructor takes the name of the two input files
@@ -28,7 +27,7 @@ public class WordNet {
         in.close();
 
         in = new In(hypernyms);
-        graph = new Digraph(synSets.size());
+        Digraph graph = new Digraph(synSets.size());
         while (in.hasNextLine()) {
             String line = in.readLine();
             String[] tokens = line.split(",");
