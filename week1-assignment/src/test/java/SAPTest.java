@@ -28,6 +28,7 @@ public class SAPTest {
         testSAP("digraph1.txt", 9, 12, 3, 5);
         testSAP("digraph1.txt", 7, 2, 4, 0);
         testSAP("digraph1.txt", 1, 6, -1, -1);
+        testSAP("digraph1.txt", 3, 3, 0, 3);
     }
 
 }

@@ -77,7 +77,7 @@ public class SAP {
 
             for (int vertex = 0; vertex < digraph.V(); vertex++) {
                 int length = bfsV.distTo(vertex) + bfsW.distTo(vertex);
-                if (length > 0 && length < shortestLength) {
+                if (length >= 0 && length < shortestLength) {
                     shortestLength = length;
                     shortestCommonAncestor = vertex;
                 }
