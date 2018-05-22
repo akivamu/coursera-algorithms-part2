@@ -44,11 +44,11 @@ public class WordNet {
 
         int rootCount = 0;
         for (int i = 0; i < graph.V(); i++) {
-            if (rootCount > 1) throw new IllegalArgumentException();
-
             if (graph.outdegree(i) == 0) {
                 rootCount++;
             }
+
+            if (rootCount > 1) throw new IllegalArgumentException();
         }
     }
 
